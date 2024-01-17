@@ -1,0 +1,27 @@
+หน้าวิดีโอ (v=)
+
+video_id (vl)
+video_url (vl)
+title (vl) 
+channel_id (c)
+channel_name (c)
+channel_profile_url (c)
+follower_count (cs)
+is_subscribed (cs)
+like_count (p)
+view_count (p)
+created_at (vl)
+description (vl)
+comment_count (p)
+comment (cm)
+username (u)
+created_at (cm)
+content (cm)
+
+
+
+
+
+
+
+
