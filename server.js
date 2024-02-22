@@ -4,6 +4,7 @@ const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const { swaggerSpec, swaggerUi } = require('./swagger');
+const fs = require('fs');
 
 const app = express();
 dotenv.config(); 
@@ -17,7 +18,12 @@ const db = mysql.createConnection({
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
     database:  process.env.DB_DATABASE,
-    port: process.env.DB_PORT
+    port: process.env.DB_PORT,
+//add ssl
+    ssl: {
+        ca: fs.readFileSync('DigiCertGlobalRootCA.crt.pem'),
+    }
+
     });
 
     db.connect((err) => {
@@ -60,6 +66,25 @@ app.get('/', (req, res) => {
       });
     }
 );
+
+app.get('/short', (req, res) => {
+  const query = `
+  SELECT vl.video_title, vl.video_thumbnail
+  FROM videos_short vl
+  JOIN channels c ON vl.channel_id = c.channel_id
+  JOIN popular p ON vl.video_id = p.video_id
+  `;
+
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error('เกิดข้อผิดพลาดในการดึงข้อมูล:', err);
+      res.status(500).send('เกิดข้อผิดพลาดในการดึงข้อมูล');
+    } else {
+      res.json(result);
+    }
+  });
+});
+
 
 /**
  * @swagger
